@@ -122,7 +122,6 @@ app.get('/api/todos/:id', async(req, res) => {
             SELECT *
             FROM todos 
             WHERE id=${req.params.id}
-            returning *;
         `,); // this array passes to the $1 in the query, sanitizing it to prevent little bobby drop tables
 
         res.json(result.rows[0]);
