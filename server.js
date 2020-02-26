@@ -114,6 +114,27 @@ app.delete('/api/todos/:id', async(req, res) => {
     }
 });
 
+app.get('/api/todos/:id', async(req, res) => {
+    // get the id that was passed in the route:
+
+    try {
+        const result = await client.query(`
+            SELECT *
+            FROM todos 
+            WHERE id=${req.params.id}
+            returning *;
+        `,); // this array passes to the $1 in the query, sanitizing it to prevent little bobby drop tables
+
+        res.json(result.rows[0]);
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).json({
+            error: err.message || err
+        });
+    }
+});
+
 // Start the server
 app.listen(PORT, () => {
     console.log('server running on PORT', PORT);
