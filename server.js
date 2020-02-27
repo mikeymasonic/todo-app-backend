@@ -22,7 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 
 ///////
 // Auth Routes
-const createAuthRoutes = require('./lib/auth/create-auth-routes');
+const createAuthRoutes = require('././lib/auth/create-auth-routes');
 const authRoutes = createAuthRoutes({
     selectUser(email) {
         return client.query(`
