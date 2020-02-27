@@ -114,10 +114,10 @@ app.put('/api/todos/:id', async(req, res) => {
     try {
         const result = await client.query(`
         update todos
-        set complete=${req.body.complete}
-        where id = ${req.params.id}
+        set complete= $1
+        where id = $2
         returning *;
-        `, [/* pass in data */]);
+        `, [req.body.complete, req.params.id]);
 
         res.json(result.rows[0]);
     }
@@ -134,9 +134,9 @@ app.delete('/api/todos/:id', async(req, res) => {
 
     try {
         const result = await client.query(`
-            delete from todos where id=${req.params.id}
+            delete from todos where id = $1
             returning *;
-        `,); // this array passes to the $1 in the query, sanitizing it to prevent little bobby drop tables
+        `, [req.params.id]); // this array passes to the $1 in the query, sanitizing it to prevent little bobby drop tables
 
         res.json(result.rows[0]);
     }
@@ -155,8 +155,8 @@ app.get('/api/todos/:id', async(req, res) => {
         const result = await client.query(`
             SELECT *
             FROM todos 
-            WHERE id=${req.params.id}
-        `,); // this array passes to the $1 in the query, sanitizing it to prevent little bobby drop tables
+            WHERE id = $1
+        `, [req.params.id]); // this array passes to the $1 in the query, sanitizing it to prevent little bobby drop tables
 
         res.json(result.rows[0]);
     }
